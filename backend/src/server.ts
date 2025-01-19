@@ -1,7 +1,9 @@
 import express from 'express'
 import colors from 'colors'
 import morgan from 'morgan'
+
 import { db } from  './config/db'
+import budgetRouter from './routes/budgetRouter'
 const app = express()
 
 
@@ -23,5 +25,6 @@ connectDB()
 app.use(morgan('dev'))
 app.use(express.json())
 
-
+// routers
+app.use('/api/budgets', budgetRouter)
 export default app
