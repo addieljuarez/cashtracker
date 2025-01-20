@@ -4,7 +4,15 @@ import Budget from '../models/Budget'
 export class BudgetController {
     static getAll = async(req: Request, res: Response) => {
         try{
-            const budgets = await Budget.findAll({})
+            const budgets = await Budget.findAll({
+                 order: [
+                    ['createdAt', 'DESC']
+                ],
+                limit: 100,
+                where: {
+                    name: 'anything'
+                }
+            })
             res.status(201).json(budgets)
         } catch(error){
             res.status(500).json({
@@ -34,7 +42,10 @@ export class BudgetController {
     }
 
     static getById = async(req: Request, res: Response) => {
-        console.log('desde controller getById')
+        // console.log('desde controller getById')
+
+        console.log(req.params.id)
+
     }
 
     static updateById = async(req: Request, res: Response) => {
