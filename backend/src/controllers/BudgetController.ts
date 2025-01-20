@@ -3,7 +3,14 @@ import Budget from '../models/Budget'
 
 export class BudgetController {
     static getAll = async(req: Request, res: Response) => {
-        console.log('desde el controller /api/budgets')
+        try{
+            const budgets = await Budget.findAll({})
+            res.status(201).json(budgets)
+        } catch(error){
+            res.status(500).json({
+                error: 'Hubo un error en getAll'
+            })
+        }
     } 
 
     static create = async(req: Request, res: Response) => {
