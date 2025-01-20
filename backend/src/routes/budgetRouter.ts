@@ -2,6 +2,7 @@ import { Router } from 'express'
 import { body, param } from 'express-validator'
 import { BudgetController } from './../controllers/BudgetController'
 import { handleInputErrors } from '../middlewares/validation'
+import {validateBudgetId} from '../middlewares/budgets'
 const router = Router()
 
 router.get('/', BudgetController.getAll)
@@ -23,20 +24,11 @@ router.post('/',
     BudgetController.create)
 
 router.get('/:id', 
-    param('id')
-        .isInt()
-        .withMessage('el ID debe ser un numero')
-        .custom(value => value > 0)
-        .withMessage('El numero debe ser positivo'),
-    handleInputErrors,
-  BudgetController.getById)
+    validateBudgetId,
+    BudgetController.getById)
 
 router.put('/:id', 
-    param('id')
-        .isInt()
-        .withMessage('el ID debe ser un numero')
-        .custom(value => value > 0)
-        .withMessage('El numero debe ser positivo'),
+    validateBudgetId,
     body('name')
         .notEmpty()
         .withMessage('El nombre del presupuesto no puede ir vacio'),
@@ -49,16 +41,10 @@ router.put('/:id',
            return value > 0
         })
         .withMessage('El numro debe ser valor a 0'),
-    handleInputErrors,
-  BudgetController.getById)
+    BudgetController.getById)
 
 router.delete('/:id', 
-    param('id')
-        .isInt()
-        .withMessage('el ID debe ser un numero')
-        .custom(value => value > 0)
-        .withMessage('El numero debe ser positivo'),
-    handleInputErrors,
+    validateBudgetId,
     BudgetController.deleteById)
 
 
