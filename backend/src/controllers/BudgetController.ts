@@ -9,9 +9,9 @@ export class BudgetController {
                     ['createdAt', 'DESC']
                 ],
                 limit: 100,
-                where: {
-                    name: 'anything'
-                }
+                // where: {
+                //     name: 'anything'
+                // }
             })
             res.status(201).json(budgets)
         } catch(error){
@@ -47,7 +47,6 @@ export class BudgetController {
     }
 
     static updateById = async(req: Request, res: Response) => {
-
         await req.budget.update(req.body)
         res.status(201).json({
             status: 'budget actualizado'

@@ -12,7 +12,7 @@ router.post('/', validateBudgetInput, BudgetController.create)
 
 router.get('/:budgetId', BudgetController.getById)
 
-router.put('/:budgetId', validateBudgetInput, BudgetController.getById)
+router.put('/:budgetId', validateBudgetInput, BudgetController.updateById)
 
 router.delete('/:budgetId', BudgetController.deleteById)
 
