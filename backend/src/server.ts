@@ -4,6 +4,7 @@ import morgan from 'morgan'
 
 import { db } from  './config/db'
 import budgetRouter from './routes/budgetRouter'
+import authRouter from './routes/authRouter'
 const app = express()
 
 
@@ -27,4 +28,7 @@ app.use(express.json())
 
 // routers
 app.use('/api/budgets', budgetRouter)
+app.use('/api/auth', authRouter)
+
+
 export default app
