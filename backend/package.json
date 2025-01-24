@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/addieljuarez/cashtracker#readme",
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "colors": "^1.4.0",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
@@ -31,6 +32,7 @@
     "sequelize-typescript": "^2.1.6"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/express": "^5.0.0",
     "@types/morgan": "^1.9.9",
     "nodemon": "^3.1.9",
