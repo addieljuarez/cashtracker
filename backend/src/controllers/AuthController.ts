@@ -2,6 +2,7 @@ import type { Request, Response } from 'express'
 import User from '../models/User'
 import {hashPassword} from '../utils/auth'
 import {generateToken} from '../utils/token'
+import AuthEmail from '../emails/AuthEmail'
 
 export class AuthController {
     
@@ -24,6 +25,13 @@ export class AuthController {
             user.password = await hashPassword(password)
             user.token = generateToken()
             const response = await user.save()
+            
+            await AuthEmail.sendConfirmationEmail({
+                name: user.name,
+                email: user.email,
+                token: user.token
+            })
+
             res.json({
                 status: 'Cuenta creada',
                 response
