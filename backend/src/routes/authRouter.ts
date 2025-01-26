@@ -6,6 +6,8 @@ import { limter } from '../config/limiter'
 
 const router = Router()
 
+router.use(limter)
+
 router.post('/create-account', 
     body('name')
         .notEmpty()
