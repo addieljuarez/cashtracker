@@ -60,5 +60,9 @@ export class AuthController {
 
         res.json('cuenta confirmada correctamente')
     }
+
+    static login = async(req: Request, res: Response) => {
+        
+    }
 }
 

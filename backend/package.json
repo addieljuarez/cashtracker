@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/addieljuarez/cashtracker#readme",
   "dependencies": {
+    "@express-rate-limit/tsconfig": "^1.0.2",
     "bcrypt": "^5.1.1",
     "colors": "^1.4.0",
     "dotenv": "^16.4.7",
