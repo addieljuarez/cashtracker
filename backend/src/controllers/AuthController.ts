@@ -3,6 +3,7 @@ import User from '../models/User'
 import {checkPassword, hashPassword} from '../utils/auth'
 import {generateToken} from '../utils/token'
 import AuthEmail from '../emails/AuthEmail'
+import { generateJWT } from '../utils/jwt'
 
 export class AuthController {
     
@@ -61,7 +62,7 @@ export class AuthController {
         res.json('cuenta confirmada correctamente')
     }
 
-    static login = async(req: Request, res: Response) => {
+    static login = async(req: Request, res: Response): Promise<any> => {
         const { email, password } = req.body
         const user = await User.findOne({
             where: {email}
@@ -83,11 +84,17 @@ export class AuthController {
         const passwordIsCheck = await checkPassword(password, user.password);
         if(!passwordIsCheck){
             const error = new Error('Password inconrrecto')
-            res.status(401).json({
+            return res.status(401).json({
                 error: error.message
             })
         }
-        res.json(user)
+
+        const token = generateJWT(user.id)
+        console.log('token', token)
+        res.json({
+            user,
+            token
+        })
     }
 }
 
