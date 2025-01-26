@@ -43,5 +43,10 @@ export class AuthController {
             })
         }
     }
+
+    static confirmAccount = async(req: Request, res: Response) => {
+
+        console.log('confirmAcount')
+    }
 }
 
