@@ -135,5 +135,25 @@ export class AuthController {
 
         res.json('Token valido')
     }
+
+    static resetPasswordWithToken = async(req: Request, res: Response): Promise<any> => {
+        const { token } = req.params
+        const { password } = req.body
+        const user = await User.findOne({
+            where: {token}
+        })
+        if(!user){
+            const error = new Error('Token no valido ---')
+            return res.status(401).json({
+                error: error.message
+            })
+        }
+
+        user.password = await hashPassword(password)
+        user.token = null
+        await user.save()
+
+        res.json('Password actualizado correctamente')
+    }
 }
 
