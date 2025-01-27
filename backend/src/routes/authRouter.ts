@@ -47,4 +47,14 @@ router.post('/login',
     AuthController.login
 )
 
+router.post('/forgot-password',
+    body('email')
+        .notEmpty()
+        .withMessage('El email es obligatorio')
+        .isEmail()
+        .withMessage('Email no valido'),
+    handleInputErrors,
+    AuthController.forgotPassword
+)
+
 export default router
