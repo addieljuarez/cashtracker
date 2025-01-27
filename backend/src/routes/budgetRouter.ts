@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { BudgetController } from './../controllers/BudgetController'
 import ExpenseController from '../controllers/ExpenseController'
-import {validateBudgetExists, validateBudgetId, validateBudgetInput} from '../middlewares/budgets'
+import {hasAcess, validateBudgetExists, validateBudgetId, validateBudgetInput} from '../middlewares/budgets'
 import {validateExpenseExists, validateExpenseId, validateExpenseInput} from '../middlewares/expense'
 import {authenticate} from '../middlewares/auth'
 
@@ -13,6 +13,7 @@ router.get('/', BudgetController.getAll)
 // budgets routes
 router.param('budgetId', validateBudgetId)
 router.param('budgetId', validateBudgetExists)
+router.param('budgetId', hasAcess)
 router.param('expenseId', validateExpenseId)
 router.param('expenseId', validateExpenseExists)
 

@@ -10,6 +10,9 @@ export class BudgetController {
                     ['createdAt', 'DESC']
                 ],
                 limit: 100,
+                where: {
+                    userId: req.user.id
+                }
                 // where: {
                 //     name: 'anything'
                 // }
