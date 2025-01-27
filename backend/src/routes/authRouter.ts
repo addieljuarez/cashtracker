@@ -106,4 +106,15 @@ router.post('/update-password',
     AuthController.updatePassword
 )
 
+router.post('/check-password',
+    authenticate,
+    body('password')
+        .notEmpty()
+        .withMessage('El password es obligatorio')
+        .isLength({min: 8})
+        .withMessage('El password es muy corto, minimo 8 caracteres'),
+    handleInputErrors,
+    AuthController.checkPassword
+)
+
 export default router
