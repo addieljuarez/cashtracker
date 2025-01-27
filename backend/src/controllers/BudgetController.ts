@@ -28,6 +28,7 @@ export class BudgetController {
             console.log(req.body)
             // res.send(req.body)
             const budget = new Budget(req.body)
+            budget.userId = req.user.id
             await budget.save()
             res.status(201).json({
                 'respuesta': 'creado correctamente'

@@ -3,7 +3,10 @@ import { BudgetController } from './../controllers/BudgetController'
 import ExpenseController from '../controllers/ExpenseController'
 import {validateBudgetExists, validateBudgetId, validateBudgetInput} from '../middlewares/budgets'
 import {validateExpenseExists, validateExpenseId, validateExpenseInput} from '../middlewares/expense'
+import {authenticate} from '../middlewares/auth'
+
 const router = Router()
+router.use(authenticate)
 
 router.get('/', BudgetController.getAll)
 
