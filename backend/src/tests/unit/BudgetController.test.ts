@@ -95,4 +95,25 @@ describe('BudgetController.getAll', () => {
         expect(res.statusCode).not.toBe(404)
 
     })
+
+    it('should handle errors when fetching budgets', async () => {
+        Budget.findAll = jest.fn().mockRejectedValue(new Error)
+        const req = createRequest({
+            method: 'GET', // esto se puede ir pero sirve para documentar 
+            url: '/api/budgets', // esto se puede ir pero sirve para documentar
+            user: {
+                id: 1
+            }
+        })
+        
+        const res = createResponse()
+        // aqui iba el codigo del foreach
+        await BudgetController.getAll(req, res)
+
+        expect(res.statusCode).toBe(500)
+        expect(res.statusCode).not.toBe(200)
+        expect(res._getJSONData()).toEqual({
+            error: 'Hubo un error en getAll'
+        })
+    })
 })
