@@ -36,7 +36,7 @@ describe('BudgetController.getAll', () => {
 
         const data = res._getJSONData()
 
-        console.log('data: ===', data)
+        // console.log('data: ===', data)
 
         expect(data).toHaveLength(2)
         expect(res.statusCode).toBe(200)
@@ -62,7 +62,7 @@ describe('BudgetController.getAll', () => {
 
         const data = res._getJSONData()
 
-        console.log('data: ===', data)
+        // console.log('data: ===', data)
 
         expect(data).toHaveLength(1)
         expect(res.statusCode).toBe(200)
@@ -88,7 +88,7 @@ describe('BudgetController.getAll', () => {
 
         const data = res._getJSONData()
 
-        console.log('data: ===', data)
+        //console.log('data: ===', data)
 
         expect(data).toHaveLength(0)
         expect(res.statusCode).toBe(200)
@@ -115,5 +115,42 @@ describe('BudgetController.getAll', () => {
         expect(res._getJSONData()).toEqual({
             error: 'Hubo un error en getAll'
         })
+    })
+})
+
+
+
+
+describe('BudgetController.create', () => {
+    it('should create a new budget and response with statusCode 201', async () => {
+        const req = createRequest({
+            method: 'POST',
+            url: '/api/budgets',
+            user: {
+                id: 1
+            },
+            body: {
+                name: 'Presupuesto de prueba',
+                amount: 1000
+            }
+        })
+
+        const res = createResponse();
+        
+        const mockBudget = {
+            save: jest.fn().mockResolvedValue(true)
+        }
+        Budget.create = jest.fn().mockResolvedValue(mockBudget)
+        await BudgetController.create(req, res)
+        const data = res._getJSONData()
+        // console.log(data)
+
+        expect(res.statusCode).toBe(201)
+        expect(data).toEqual({
+            respuesta: 'creado correctamente'
+        })
+        expect(mockBudget.save).toHaveBeenCalled()
+        expect(mockBudget.save).toHaveBeenCalledTimes(1)
+        expect(Budget.create).toHaveBeenCalledWith(req.body)
     })
 })
