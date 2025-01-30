@@ -153,4 +153,37 @@ describe('BudgetController.create', () => {
         expect(mockBudget.save).toHaveBeenCalledTimes(1)
         expect(Budget.create).toHaveBeenCalledWith(req.body)
     })
+
+
+    it('should hanlde error when create errors', async () => {
+
+        const mockBudget = {
+            save: jest.fn()
+        }
+
+        const req = createRequest({
+            method: 'POST',
+            url: '/api/budgets',
+            user: {
+                id: 1
+            },
+            body: {
+                name: 'Presupuesto de prueba',
+                amount: 1000
+            }
+        })
+
+        const res = createResponse();
+
+        Budget.create = jest.fn().mockRejectedValue(new Error())
+        
+        await BudgetController.create(req, res)
+        expect(res.statusCode).toBe(500)
+        expect(res._getJSONData()).toEqual({
+            error: 'hubo un error en createController budget'
+        })
+        expect(mockBudget.save).not.toHaveBeenCalled()
+        expect(Budget.create).toHaveBeenCalledWith(req.body)
+
+    })
 })
