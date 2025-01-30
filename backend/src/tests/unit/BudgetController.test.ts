@@ -203,7 +203,7 @@ describe('BudgetController.getById', () => {
         
         const req = createRequest({
             method: 'GET',
-            url:'/api/budgets/:id',
+            url:'/api/budgets/:budgetId',
             budget: {
                 id: 1
             }
@@ -227,7 +227,7 @@ describe('BudgetController.getById', () => {
         
         const req = createRequest({
             method: 'GET',
-            url:'/api/budgets/:id',
+            url:'/api/budgets/:budgetId',
             budget: {
                 id: 2
             }
@@ -262,5 +262,34 @@ describe('BudgetController.getById', () => {
         expect(data.expenses).toHaveLength(0)
         
         
+    })
+})
+
+describe('BudgetController.updateById', () => {
+    it('should update a budget with ID 1', async() => {
+
+        const budgetMock = {
+            update: jest.fn().mockResolvedValue(true)
+        }
+        const req = createRequest({
+            method: 'PUT',
+            url: '/api/budgets/:budgetId',
+            budget: budgetMock,
+            body: {
+                name: 'Presupuesto actualizado',
+                amount: 1000
+            }
+        })
+        
+        const res = createResponse()
+
+        await BudgetController.updateById(req, res)
+        expect(res.statusCode).toBe(200)
+        expect(res._getJSONData()).toEqual({
+            status: 'budget actualizado'
+        })
+        expect(req.budget.update).toHaveBeenCalled()
+        expect(req.budget.update).toHaveBeenCalledTimes(1)
+        expect(req.budget.update).toHaveBeenCalledWith(req.body)
     })
 })
