@@ -57,7 +57,7 @@ export class BudgetController {
 
     static updateById = async(req: Request, res: Response) => {
         await req.budget.update(req.body)
-        res.status(201).json({
+        res.status(200).json({
             status: 'budget actualizado'
         })
     }

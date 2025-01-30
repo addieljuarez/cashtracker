@@ -2,6 +2,7 @@ import { createRequest, createResponse } from 'node-mocks-http'
 import { budgets } from "../mocks/budgets"
 import {BudgetController} from "../../controllers/BudgetController"
 import Budget from '../../models/Budget'
+import Expense from '../../models/Expense'
 
 
 describe('BudgetController.getAll', () => {
@@ -10,7 +11,7 @@ describe('BudgetController.getAll', () => {
         Budget.findAll = jest.fn().mockReset()
 
         Budget.findAll = jest.fn().mockImplementation((options) => {
-            console.log('options: ', options.where.userId)
+            // console.log('options findAll: ', options.where.userId)
             const updatedBudgets = budgets.filter(budget => budget.userId === options.where.userId)
             // Budget.findAll = jest.fn().mockResolvedValue(updatedBudgets)
             return Promise.resolve(updatedBudgets)
@@ -118,9 +119,6 @@ describe('BudgetController.getAll', () => {
     })
 })
 
-
-
-
 describe('BudgetController.create', () => {
     it('should create a new budget and response with statusCode 201', async () => {
         const req = createRequest({
@@ -185,5 +183,84 @@ describe('BudgetController.create', () => {
         expect(mockBudget.save).not.toHaveBeenCalled()
         expect(Budget.create).toHaveBeenCalledWith(req.body)
 
+    })
+})
+
+describe('BudgetController.getById', () => {
+    
+    beforeEach(() => {
+        Budget.findByPk = jest.fn().mockReset()
+        Budget.findByPk = jest.fn().mockImplementation((id, include) => {
+            console.log('id getById', id)
+            console.log('include getById', include)
+            const updateBudget = budgets.filter(budget => budget.id == id)[0]
+            console.log('updateBudget', updateBudget)
+            return Promise.resolve(updateBudget)
+        })
+    })
+
+    it('should return a budget with ID 1 and 3 expenses', async () => {
+        
+        const req = createRequest({
+            method: 'GET',
+            url:'/api/budgets/:id',
+            budget: {
+                id: 1
+            }
+        })
+
+        const res = createResponse()
+
+        await BudgetController.getById(req, res)
+
+        const data = res._getJSONData()
+        expect(res.statusCode).toBe(200)
+        expect(data.expenses).toHaveLength(3)
+        expect(Budget.findByPk).toHaveBeenCalled()
+        expect(Budget.findByPk).toHaveBeenCalledTimes(1)
+        expect(Budget.findByPk).toHaveBeenCalledWith(req.budget.id, {
+            include: [Expense]
+        })
+    })
+
+    it('should return a budget with ID 2 and 2 expenses', async () => {
+        
+        const req = createRequest({
+            method: 'GET',
+            url:'/api/budgets/:id',
+            budget: {
+                id: 2
+            }
+        })
+
+        const res = createResponse()
+
+        await BudgetController.getById(req, res)
+
+        const data = res._getJSONData()
+        expect(res.statusCode).toBe(200)
+        expect(data.expenses).toHaveLength(2)
+        
+    })
+
+    it('should return a budget with ID 3 and 0 expenses', async () => {
+        
+        const req = createRequest({
+            method: 'GET',
+            url:'/api/budgets/:budgetId',
+            budget: {
+                id: 3
+            }
+        })
+
+        const res = createResponse()
+
+        await BudgetController.getById(req, res)
+
+        const data = res._getJSONData()
+        expect(res.statusCode).toBe(200)
+        expect(data.expenses).toHaveLength(0)
+        
+        
     })
 })
