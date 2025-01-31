@@ -288,8 +288,8 @@ describe('BudgetController.updateById', () => {
         expect(res._getJSONData()).toEqual({
             status: 'budget actualizado'
         })
-        expect(req.budget.update).toHaveBeenCalled()
-        expect(req.budget.update).toHaveBeenCalledTimes(1)
-        expect(req.budget.update).toHaveBeenCalledWith(req.body)
+        expect(budgetMock.update).toHaveBeenCalled()
+        expect(budgetMock.update).toHaveBeenCalledTimes(1)
+        expect(budgetMock.update).toHaveBeenCalledWith(req.body)
     })
 })
