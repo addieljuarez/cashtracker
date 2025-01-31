@@ -31,4 +31,31 @@ describe('ExpenseController.create', () => {
             status: 'Expense creado correctamente'
         })
     })
+
+    it('should handle error to create expense', async() => {
+
+        const mockExpense = {
+            save: jest.fn().mockResolvedValue(true)
+        }
+        const req = createRequest({
+            method: 'POST',
+            url: '/api/budgets/:budgetId/expenses',
+            budget: budgets,
+            body: {
+                name: 'test expense',
+                amount: 1000
+            }
+        })
+        const res = createResponse()
+        Expense.create = jest.fn().mockRejectedValue(new Error)
+        await ExpenseController.create(req, res)
+
+        expect(res.statusCode).toBe(500)
+        expect(mockExpense.save).not.toHaveBeenCalled()
+        expect(mockExpense.save).toHaveBeenCalledTimes(0)
+        expect(Expense.create).toHaveBeenCalledWith(req.body)
+        expect(res._getJSONData()).toEqual({
+            error: 'Error en create expense'
+        })
+    })
 })
