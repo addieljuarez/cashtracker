@@ -191,10 +191,10 @@ describe('BudgetController.getById', () => {
     beforeEach(() => {
         Budget.findByPk = jest.fn().mockReset()
         Budget.findByPk = jest.fn().mockImplementation((id, include) => {
-            console.log('id getById', id)
-            console.log('include getById', include)
+            // console.log('id getById', id)
+            // console.log('include getById', include)
             const updateBudget = budgets.filter(budget => budget.id == id)[0]
-            console.log('updateBudget', updateBudget)
+            // console.log('updateBudget', updateBudget)
             return Promise.resolve(updateBudget)
         })
     })
@@ -311,7 +311,7 @@ describe('BudgetController.deleteById', () => {
 
         await BudgetController.deleteById(req, res)
         const data = res._getJSONData()
-        console.log('data', data)
+        // console.log('data', data)
         expect(res.statusCode).toBe(200)
         expect(data).toEqual({
             status: 'Budget Eliminado'
