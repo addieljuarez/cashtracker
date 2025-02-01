@@ -8,9 +8,7 @@ describe('middleware - expense - validateExpenseExists', () => {
     beforeEach(() => {
         Expense.findByPk = jest.fn().mockReset()
         Expense.findByPk = jest.fn().mockImplementation((id) => {
-            console.log('id---: ', id)
             const expense = expenses.filter(expense => expense.id == id)[0] ?? null
-            console.log('id---: ', expense)
             return Promise.resolve(expense)
         })
     })
@@ -57,6 +55,32 @@ describe('middleware - expense - validateExpenseExists', () => {
         expect(res.statusCode).toBe(404)
         expect(res._getJSONData()).toEqual({
             error: 'Expense no encontrado'
+        })
+        
+    })
+
+
+    it('should handle internal server error', async() => {
+        
+        const req = createRequest({
+            params: {
+                expenseId: 1
+            }
+        })
+
+        const res = createResponse()
+        const next = jest.fn()
+        Expense.findByPk = jest.fn().mockRejectedValue(new Error())
+        await validateExpenseExists(req, res, next)
+
+        expect(next).not.toHaveBeenCalled()
+        expect(next).toHaveBeenCalledTimes(0)
+        expect(Expense.findByPk).toHaveBeenCalled()
+        expect(Expense.findByPk).toHaveBeenCalledTimes(1)
+        expect(Expense.findByPk).toHaveBeenCalledWith(req.params.expenseId)
+        expect(res.statusCode).toBe(500)
+        expect(res._getJSONData()).toEqual({
+            error: 'Hubo un error en validateExpenseExists'
         })
         
     })
