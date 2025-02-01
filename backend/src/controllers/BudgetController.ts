@@ -19,7 +19,7 @@ export class BudgetController {
             })
             res.json(budgets)
         } catch(error){
-            console.log('error:---', error)
+            // console.log('error:---', error)
             res.status(500).json({
                 error: 'Hubo un error en getAll'
             })
@@ -39,7 +39,7 @@ export class BudgetController {
             })
         }
         catch(error){
-            console.log('error--', error)
+            // console.log('error--', error)
             res.status(500).json({
                 error: 'hubo un error en createController budget'
             })

@@ -12,7 +12,7 @@ export class ExpenseController {
                 status: 'Expense creado correctamente'
             })
         }catch(error){
-            console.log('error al crear expense', error)
+            // console.log('error al crear expense', error)
             res.status(500).json({
                 error: 'Error en create expense'
             })

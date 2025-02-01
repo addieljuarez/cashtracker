@@ -42,7 +42,7 @@ export const validateBudgetExists = async(req: Request, res: Response, next: Nex
         req.budget = budget
         next()
     }catch(error){
-        console.log('error getById', error)
+        // console.log('error getById', error)
         res.status(500).json({
             error: 'Hubo un error en getByID'
         })
