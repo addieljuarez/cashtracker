@@ -33,7 +33,8 @@ export class AuthController {
                 token: user.token
             })
 
-            res.json({
+            res.status(201)
+            .json({
                 status: 'Cuenta creada',
                 response
             })
