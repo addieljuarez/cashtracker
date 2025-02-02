@@ -14,6 +14,7 @@ export const db = new Sequelize(process.env.DATABASE_URL, {
     // ese es para los logs 
     logging: false,
     */
+    logging: false,
     dialectOptions: {
         ssl: {
             require: false
