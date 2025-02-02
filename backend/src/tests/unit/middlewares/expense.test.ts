@@ -2,6 +2,8 @@ import { createRequest, createResponse } from "node-mocks-http"
 import { validateExpenseExists } from "../../../middlewares/expense"
 import Expense from "../../../models/Expense"
 import { expenses } from "../../mocks/expenses"
+import { hasAcess } from "../../../middlewares/budgets"
+import { budgets } from "../../mocks/budgets"
 
 describe('middleware - expense - validateExpenseExists', () => {
     
@@ -82,6 +84,29 @@ describe('middleware - expense - validateExpenseExists', () => {
         expect(res._getJSONData()).toEqual({
             error: 'Hubo un error en validateExpenseExists'
         })
-        
+    })
+
+    it('should prevent unauthorized users from adding expenses', async() => {
+        const req = createRequest({
+            method: 'POST',
+            url: '/api/budgets/:bidgetId/expenses',
+            budget: budgets[0],
+            user: {
+                id: 20
+            },
+            body: {
+                name: 'test expense not allowed',
+                amount: 1000
+            }
+        })
+        const res = createResponse()
+        const next = jest.fn()
+        await hasAcess(req, res, next)
+
+        expect(next).not.toHaveBeenCalled()
+        expect(res.statusCode).toBe(401)
+        expect(res._getJSONData()).toEqual({
+            error: 'Accion no valida'
+        })
     })
 })
