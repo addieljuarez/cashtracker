@@ -81,3 +81,27 @@ describe('controller - AuthController - login', () => {
         expect(mockUser.save).toHaveBeenCalledTimes(2)
     })
 })
+
+
+describe('controller - AuthController - login', () => {
+    it('should handle login when user not exists', async() => {
+        const req = createRequest({
+            method: 'POST',
+            url: '/api/auth/login',
+            body: {
+                email: 'test@gmail.com',
+                password: '12345678'
+            }
+        })
+        const res = createResponse()
+
+        User.findOne = jest.fn().mockResolvedValue(false)
+        await AuthController.login(req, res),
+
+        expect(res.statusCode).toBe(404)
+        expect(res._getJSONData()).toHaveProperty('error', 'Usuario no encontrado')
+        expect(res._getJSONData()).toEqual({
+            error: 'Usuario no encontrado'
+        })
+    })
+})
