@@ -2,6 +2,10 @@ import { createRequest, createResponse } from "node-mocks-http"
 import { AuthController } from "../../../controllers/AuthController"
 import User from "../../../models/User"
 import AuthEmail from "../../../emails/AuthEmail"
+import { checkPassword, hashPassword } from "../../../utils/auth"
+
+jest.mock('../../../utils/auth')
+jest.mock('../../../utils/token')
 
 describe('controller - AuthController - login', () => {
 
@@ -53,7 +57,7 @@ describe('controller - AuthController - login', () => {
         User.findOne = jest.fn().mockResolvedValue(false)
         User.create = jest.fn().mockResolvedValue(mockUser)
         jest.mock("../../../utils/auth", () => ({
-            hashPassword: jest.fn().mockResolvedValue('haspassword')
+            hashPassword: jest.fn().mockResolvedValue('12345678')
         }));
         jest.mock("../../../utils/token", () => ({
             generateToken: jest.fn().mockReturnValue('123456')
@@ -128,5 +132,42 @@ describe('controller - AuthController - login', () => {
         expect(res._getJSONData()).toEqual({
             error: 'La cuenta no ha sido confirmada'
         })
+    })
+
+    it('should handle login when password is not success and return 401', async() => {
+        const req = createRequest({
+            method: 'POST',
+            url: '/api/auth/login',
+            body: {
+                email: 'test@gmail.com',
+                password: '12345678'
+            }
+        })
+        const res = createResponse()
+
+        const mockUser = {
+            id: 1,
+            email: 'test@gmail.com',
+            password: '12345678',
+            confirmed: true
+        }
+        User.findOne = jest.fn().mockResolvedValue(mockUser)
+
+        
+        
+        jest.mock("../../../utils/auth", () => ({
+            checkPassword: jest.fn().mockResolvedValue(false)
+        }));
+
+        await AuthController.login(req, res),
+ 
+        expect(res.statusCode).toBe(401)
+        expect(res._getJSONData()).toHaveProperty('error', 'Password inconrrecto')
+        expect(res._getJSONData()).toEqual({
+            error: 'Password inconrrecto'
+        })
+        expect(checkPassword).toHaveBeenCalled()
+        expect(checkPassword).toHaveBeenCalledTimes(1)
+        expect(checkPassword).toHaveBeenCalledWith(req.body.password, mockUser.password)
     })
 })
