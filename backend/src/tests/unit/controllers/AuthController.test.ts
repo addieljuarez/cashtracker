@@ -104,4 +104,29 @@ describe('controller - AuthController - login', () => {
             error: 'Usuario no encontrado'
         })
     })
+
+    it('should handle login when user not confirmed and return 403', async() => {
+        const req = createRequest({
+            method: 'POST',
+            url: '/api/auth/login',
+            body: {
+                email: 'test@gmail.com',
+                password: '12345678'
+            }
+        })
+        const res = createResponse()
+
+        User.findOne = jest.fn().mockResolvedValue({
+            id: 1,
+            email: 'test@gmail.com',
+            confirmed: false
+        })
+        await AuthController.login(req, res),
+
+        expect(res.statusCode).toBe(403)
+        expect(res._getJSONData()).toHaveProperty('error', 'La cuenta no ha sido confirmada')
+        expect(res._getJSONData()).toEqual({
+            error: 'La cuenta no ha sido confirmada'
+        })
+    })
 })
