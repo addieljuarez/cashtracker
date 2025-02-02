@@ -1,0 +1,164 @@
+
+
+
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNzM3OTU5MDU1LCJleHAiOjE3NDA1NTEwNTV9.4aexZMVaY_ljZSB0_5I-X6YjsRd9417P3eAvS8nKRDQ
+
+
+### budgets
+
+
+GET http://localhost:4000/api/budgets
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+
+POST http://localhost:4000/api/budgets
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "name": "test 5",
+    "amount": 22234
+}
+
+###
+{
+    "name": "test 7",
+    "amount": 22234
+}
+
+
+###
+GET http://localhost:4000/api/budgets/1
+
+
+###
+PUT http://localhost:4000/api/budgets/1
+Content-Type: application/json
+
+{
+    "name": "new name 2",
+    "amount": 5000
+}
+
+
+###
+DELETE http://localhost:4000/api/budgets/3
+
+
+
+
+
+
+###
+### Expenses
+
+
+###
+
+POST http://localhost:4000/api/budgets/1/expenses
+Content-Type: application/json
+
+{
+    "name": "test expense 4",
+    "amount": 22234
+}
+
+
+###
+GET http://localhost:4000/api/budgets/1/expenses/1
+
+
+###
+PUT http://localhost:4000/api/budgets/1/expenses/1
+Content-Type: application/json
+
+{
+    "name": "new name",
+    "amount": 5000
+}
+
+
+###
+DELETE http://localhost:4000/api/budgets/1/expenses/3
+
+
+
+
+###
+### Auth
+###
+
+POST http://localhost:4000/api/auth/create-account
+Content-Type: application/json
+
+{
+    "name": "test",
+    "password": "12345678",
+    "email": "test8@gmail.com"
+}
+
+
+###
+
+POST http://localhost:4000/api/auth/confirm-account
+Content-Type: application/json
+
+{
+    "token": "113909"
+}
+
+###
+###
+POST http://localhost:4000/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "test@gmail.com",
+    "password": "123456789"
+}
+
+###
+
+POST http://localhost:4000/api/auth/forgot-password
+Content-Type: application/json
+
+{
+    "email": "test@gmail.com"
+}
+
+###
+
+POST http://localhost:4000/api/auth/reset-password/173294
+Content-Type: application/json
+
+{
+    "password": "12345678"
+}
+
+
+###
+GET http://localhost:4000/api/auth/user
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+
+###
+POST http://localhost:4000/api/auth/update-password
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "current_password": "12345678",
+    "new_password": "123456789"
+}
+
+###
+POST http://localhost:4000/api/auth/check-password
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "password": "123456789"
+}
