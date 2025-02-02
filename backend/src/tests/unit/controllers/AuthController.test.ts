@@ -3,9 +3,12 @@ import { AuthController } from "../../../controllers/AuthController"
 import User from "../../../models/User"
 import AuthEmail from "../../../emails/AuthEmail"
 import { checkPassword, hashPassword } from "../../../utils/auth"
+import { generateJWT } from "../../../utils/jwt"
 
 jest.mock('../../../utils/auth')
 jest.mock('../../../utils/token')
+jest.mock('../../../utils/jwt')
+
 
 describe('controller - AuthController - login', () => {
 
@@ -169,5 +172,47 @@ describe('controller - AuthController - login', () => {
         expect(checkPassword).toHaveBeenCalled()
         expect(checkPassword).toHaveBeenCalledTimes(1)
         expect(checkPassword).toHaveBeenCalledWith(req.body.password, mockUser.password)
+    })
+
+    it('should handle login when account is success and return 200', async() => {
+        const req = createRequest({
+            method: 'POST',
+            url: '/api/auth/login',
+            body: {
+                email: 'test@gmail.com',
+                password: '12345678'
+            }
+        })
+        const res = createResponse()
+
+        const mockUser = {
+            id: 1,
+            email: 'test@gmail.com',
+            password: '12345678',
+            confirmed: true
+        }
+        User.findOne = jest.fn().mockResolvedValue(mockUser);
+        const fakeJWT = 'fake_jwt';
+        
+        // jest.mock("../../../utils/auth", () => ({
+        //     checkPassword: jest.fn().mockResolvedValue(true)
+        // }));
+        (checkPassword as jest.Mock).mockResolvedValue(true);
+        (generateJWT as jest.Mock).mockReturnValue(fakeJWT);
+        
+        // jest.mock("../../../utils/jwt", () => ({
+        //     generateJWT: jest.fn().mockReturnValue(fakeJWT)
+        // }));
+
+        await AuthController.login(req, res)
+ 
+        expect(res.statusCode).toBe(200)
+        expect(res._getJSONData()).toEqual({
+            user: mockUser,
+            token: fakeJWT
+        })
+        expect(generateJWT).toHaveBeenCalled()
+        expect(generateJWT).toHaveBeenCalledTimes(1)
+        expect(generateJWT).toHaveBeenCalledWith(mockUser.id)
     })
 })
