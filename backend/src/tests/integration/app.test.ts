@@ -84,16 +84,40 @@ describe('Authentication - Create', () => {
         const userData = {
             name: 'name',
             password: '12345678',
-            email: 'test@gmail.com'
+            email: 'test1@gmail.com'
         }
         const response = await request(server)
             .post('/api/auth/create-account')
             .send(userData)
 
         
-        expect(response.status).toBe(200)
-        expect(AuthController.createAccount).toHaveBeenCalled()
-        expect(AuthController.createAccount).toHaveBeenCalledTimes(1)
+        expect(response.status).toBe(201)
+        expect(response.status).not.toBe(400)
+        expect(response.body).not.toHaveProperty('errors')
+        
+        
+    })
+
+
+    it('should return 409 when user already register', async() => {
+
+        const userData = {
+            name: 'name',
+            password: '12345678',
+            email: 'test1@gmail.com'
+        }
+        const response = await request(server)
+            .post('/api/auth/create-account')
+            .send(userData)
+
+        
+        console.log('response.body', response.body)
+        expect(response.status).toBe(409)
+        expect(response.body).toHaveProperty('error')
+        expect(response.status).not.toBe(400)
+        expect(response.status).not.toBe(201)
+        // expect(AuthController.createAccount).toHaveBeenCalled()
+        // expect(AuthController.createAccount).toHaveBeenCalledTimes(1)
         expect(response.body).not.toHaveProperty('errors')
     })
 })
