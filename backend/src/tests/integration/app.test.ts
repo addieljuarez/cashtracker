@@ -78,4 +78,28 @@ describe('Authentication - Create', () => {
         expect(response.body.errors[0].msg).toBe('El password es muy corto, minimo 8 carcateres')
 
     })
+
+    it('should return 200 when all is ok and create account', async() => {
+
+        const userData = {
+            name: 'name',
+            password: '12345678',
+            email: 'test@gmail.com'
+        }
+        const response = await request(server)
+            .post('/api/auth/create-account')
+            .send(userData)
+
+        // console.log('response Auth: ', response.body.errors[0].msg)
+        // const createAccountMock = jest.spyOn(AuthController, 'createAccount')
+        
+        expect(response.status).toBe(200)
+        expect(AuthController.createAccount).toHaveBeenCalled()
+        expect(AuthController.createAccount).toHaveBeenCalledTimes(1)
+        expect(response.body).not.toHaveProperty('errors')
+        // expect(response.body.errors).toHaveLength(0)
+        
+        // expect(response.body.errors[0].msg).toBe('El password es muy corto, minimo 8 carcateres')
+
+    })
 })
