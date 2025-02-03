@@ -66,7 +66,7 @@ describe('Authentication - Create', () => {
                 email: 'test@gmail.com'
             })
 
-        // console.log('response Auth: ', response.body.errors)
+        console.log('response Auth: ', response.body.errors[0].msg)
         const createAccountMock = jest.spyOn(AuthController, 'createAccount')
         
         expect(response.status).toBe(400)
@@ -75,6 +75,7 @@ describe('Authentication - Create', () => {
         expect(response.body.errors).toHaveLength(1)
         expect(createAccountMock).not.toHaveBeenCalled()
         expect(createAccountMock).toHaveBeenCalledTimes(0)
+        expect(response.body.errors[0].msg).toBe('El password es muy corto, minimo 8 carcateres')
 
     })
 })
