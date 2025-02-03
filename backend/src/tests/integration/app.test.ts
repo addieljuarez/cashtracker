@@ -1,6 +1,6 @@
 import request from 'supertest'
 import server, { connectDB } from '../../server'
-
+import { AuthController } from '../../controllers/AuthController'
 
 describe('TEST', () => {
 
@@ -20,16 +20,37 @@ describe('TEST', () => {
 
 
 describe('Authentication - Create', () => {
-    it('should displkay validation errors when form is empty', async() => {
+    it('should display validation errors when form is empty', async() => {
         const response = await request(server)
             .post('/api/auth/create-account')
             .send({})
 
         // console.log('response Auth: ', response.body.errors)
-
+        const createAccountMock = jest.spyOn(AuthController, 'createAccount')
+        
         expect(response.status).toBe(400)
         expect(response.status).not.toBe(200)
         expect(response.body).toHaveProperty('errors')
         expect(response.body.errors).toHaveLength(3)
+        expect(createAccountMock).not.toHaveBeenCalled()
+        expect(createAccountMock).toHaveBeenCalledTimes(0)
     })
+
+
+    // it('should return 400 when the email is invalid', async() => {
+    //     const response = await request(server)
+    //         .post('/api/auth/create-account')
+    //         .send({})
+
+    //     // console.log('response Auth: ', response.body.errors)
+    //     const createAccountMock = jest.spyOn(AuthController, 'createAccount')
+        
+    //     expect(response.status).toBe(400)
+    //     expect(response.status).not.toBe(200)
+    //     expect(response.body).toHaveProperty('errors')
+    //     expect(response.body.errors).toHaveLength(3)
+    //     expect(createAccountMock).not.toHaveBeenCalled()
+    //     expect(createAccountMock).toHaveBeenCalledTimes(0)
+
+    // })
 })
