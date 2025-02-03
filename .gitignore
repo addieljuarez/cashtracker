@@ -136,6 +136,9 @@ dist
 .pnp.*
 
 commitBackend.sh
+commitFrontend.sh
+
+coverage/
 
 *.swp
 *.swo
