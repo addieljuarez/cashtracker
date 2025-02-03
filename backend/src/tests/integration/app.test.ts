@@ -25,6 +25,11 @@ describe('Authentication - Create', () => {
             .post('/api/auth/create-account')
             .send({})
 
-        console.log('response Auth: ', response.body)
+        // console.log('response Auth: ', response.body.errors)
+
+        expect(response.status).toBe(400)
+        expect(response.status).not.toBe(200)
+        expect(response.body).toHaveProperty('errors')
+        expect(response.body.errors).toHaveLength(3)
     })
 })
