@@ -331,6 +331,26 @@ describe('auth - login', () => {
 
 // Budgets
 describe('GET /api/budgets', ()=> {
+
+    let jwt: string
+
+    beforeAll(() => {
+        jest.restoreAllMocks() // restaura las funciones de los jest.spy a su implementacion original
+    })
+    beforeAll(async() => {
+        const response = await request(server)
+            .post('/api/auth/login')
+            .send({
+                email: 'test1@gmail.com',
+                password: '12345678'
+            })
+        
+        jwt = response.body.token
+        console.log('response login token: ', jwt)
+        expect(response.statusCode).toBe(200)
+    })
+
+
     it('should reject unauthenticated access to budgets without a jwt', async() => {
         const response = await request(server)
             .get('/api/budgets')
@@ -342,4 +362,17 @@ describe('GET /api/budgets', ()=> {
             error: 'No autorizado'
         })
     })
+
+    // it('should success access to budgets with a jwt', async() => {
+    //     const response = await request(server)
+    //         .get('/api/budgets')
+    //         .auth(jwt, {type: 'bearer'})
+
+    //     // console.log('/api/budgets', response.body)
+
+    //     expect(response.status).toBe(200)
+    //     expect(response.body).toEqual({
+    //         error: 'No autorizado'
+    //     })
+    // })
 })
