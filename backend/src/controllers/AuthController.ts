@@ -24,7 +24,13 @@ export class AuthController {
         try{
             const user = await User.create(req.body)
             user.password = await hashPassword(password)
-            user.token = generateToken()
+            const token = generateToken()
+            user.token = token
+
+            if(process.env.NODE!== 'production'){
+                globalThis.cashTrackerToken = token
+            }
+            
             const response = await user.save()
             
             await AuthEmail.sendConfirmationEmail({
@@ -46,13 +52,13 @@ export class AuthController {
         }
     }
 
-    static confirmAccount = async(req: Request, res: Response) => {
+    static confirmAccount = async(req: Request, res: Response): Promise<any> => {
 
         const {token} = req.body
         const user = await User.findOne({where: {token}})
         if(!user){
             const error = new Error('Token no valido')
-            res.status(401).json({
+            return res.status(401).json({
                 error: error.message
             })
         }

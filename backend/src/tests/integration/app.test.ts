@@ -133,17 +133,35 @@ describe('Authentication - Account confirmation code', () => {
         expect(response.body.errors).toHaveLength(2)
     })
 
-    // it('should display error when token is invalid', async() => {
-    //     const response = await request(server)
-    //         .post('/api/auth/confirm-account')
-    //         .send({
-    //             token: '123456'
-    //         })
+    it('should display error when token is invalid', async() => {
+        const response = await request(server)
+            .post('/api/auth/confirm-account')
+            .send({
+                token: '123456'
+            })
 
-    //     console.log('Authentication - Account confirmation code', response.body)
-    //     expect(response.statusCode).toBe(401)
-    //     expect(response.body).toHaveProperty('error')
-    //     expect(response.statusCode).not.toBe(200)
-    //     // expect(response.body.errors).toHaveLength(2)
-    // })
+        // console.log('Authentication - Account confirmation code', response.body)
+        expect(response.statusCode).toBe(401)
+        expect(response.body).toHaveProperty('error')
+        expect(response.statusCode).not.toBe(200)
+        // expect(response.body.errors).toHaveLength(2)
+    })
+
+
+
+    it('should display error when token is valid', async() => {
+        const response = await request(server)
+            .post('/api/auth/confirm-account')
+            .send({
+                token: `${globalThis.cashTrackerToken}`
+            })
+
+        // console.log('globalThis', globalThis.cashTrackerToken)
+        expect(response.statusCode).toBe(200)
+        expect(response.body).toBe('cuenta confirmada correctamente')
+        
+        // expect(response.body).toHaveProperty('error')
+        // expect(response.statusCode).not.toBe(200)
+        // expect(response.body.errors).toHaveLength(2)
+    })
 })
