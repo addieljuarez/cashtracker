@@ -228,7 +228,32 @@ describe('auth - login', () => {
                 password: '12345678'
             })
         
-        console.log('auth login--', response.body)
+        // console.log('auth login--', response.body)
+        expect(response.statusCode).toBe(403)
+        expect(response.body).toHaveProperty('error')
+        expect(response.body.error).toBe('La cuenta no ha sido confirmada')
+    })
+
+    it('should display validation errors when account is not confimed part 2', async() => {
+
+        const userData = {
+            name: 'testNC',
+            password: '12345678',
+            email: 'test3@gmail.com'
+        }
+
+        await request(server)
+            .post('/api/auth/create-account')
+            .send(userData)
+
+        const response = await request(server)
+            .post('/api/auth/login')
+            .send({
+                email: 'test@gmail.com',
+                password: '12345678'
+            })
+        
+        // console.log('auth login--', response.body)
         expect(response.statusCode).toBe(403)
         expect(response.body).toHaveProperty('error')
         expect(response.body.error).toBe('La cuenta no ha sido confirmada')
