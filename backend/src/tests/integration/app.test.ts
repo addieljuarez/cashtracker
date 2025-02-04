@@ -177,4 +177,23 @@ describe('auth - login', () => {
         expect(mockLogin).toHaveBeenCalledTimes(0)
 
     })
+
+    it('should display validation errors when email is not valid', async() => {
+        const response = await request(server)
+            .post('/api/auth/login')
+            .send({
+                email: 'test_email_not_valid',
+                password: '12345678'
+            })
+
+        const mockLogin = jest.spyOn(AuthController, 'login')
+        // console.log('auth login--', response.body)
+        expect(response.statusCode).toBe(400)
+        expect(response.body).toHaveProperty('errors')
+        expect(response.body.errors[0].msg).toBe('Email no valido')
+        expect(response.body.errors).toHaveLength(1)
+        expect(mockLogin).not.toHaveBeenCalled()
+        expect(mockLogin).toHaveBeenCalledTimes(0)
+
+    })
 })
