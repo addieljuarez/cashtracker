@@ -1,6 +1,7 @@
 import request from 'supertest'
 import server, { connectDB } from '../../server'
 import { AuthController } from '../../controllers/AuthController'
+import User from '../../models/User'
 
 describe('TEST', () => {
 
@@ -196,4 +197,40 @@ describe('auth - login', () => {
         expect(mockLogin).toHaveBeenCalledTimes(0)
 
     })
+
+    it('should display validation errors when email not exists', async() => {
+        const response = await request(server)
+            .post('/api/auth/login')
+            .send({
+                email: 'test2@gmail.com',
+                password: '12345678'
+            })
+        
+        // console.log('auth login--', response.body)
+        expect(response.statusCode).toBe(404)
+        expect(response.body).toHaveProperty('error')
+        expect(response.body.error).toBe('Usuario no encontrado')
+    })
+
+    // it('should display validation errors when account is not confimed', async() => {
+
+    //     (jest.spyOn(User, 'findOne') as jest.Mock)
+    //         .mockResolvedValue({
+    //             id:1,
+    //             confirmed: false,
+    //             password: '12345678',
+    //             email: 'test@gmail.com'
+    //         })
+    //     const response = await request(server)
+    //         .post('/api/auth/login')
+    //         .send({
+    //             email: 'test@gmail.com',
+    //             password: '12345678'
+    //         })
+        
+    //     console.log('auth login--', response.body)
+    //     expect(response.statusCode).toBe(403)
+    //     expect(response.body).toHaveProperty('error')
+    //     expect(response.body.error).toBe('Usuario no encontrado')
+    // })
 })
