@@ -159,9 +159,5 @@ describe('Authentication - Account confirmation code', () => {
         // console.log('globalThis', globalThis.cashTrackerToken)
         expect(response.statusCode).toBe(200)
         expect(response.body).toBe('cuenta confirmada correctamente')
-        
-        // expect(response.body).toHaveProperty('error')
-        // expect(response.statusCode).not.toBe(200)
-        // expect(response.body.errors).toHaveLength(2)
     })
 })
