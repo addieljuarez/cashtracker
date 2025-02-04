@@ -249,13 +249,37 @@ describe('auth - login', () => {
         const response = await request(server)
             .post('/api/auth/login')
             .send({
-                email: 'test@gmail.com',
-                password: '12345678'
+                email: userData.email,
+                password: userData.password
             })
         
         // console.log('auth login--', response.body)
         expect(response.statusCode).toBe(403)
         expect(response.body).toHaveProperty('error')
         expect(response.body.error).toBe('La cuenta no ha sido confirmada')
+    })
+
+    it('should display validation errors when password is bad', async() => {
+
+        (jest.spyOn(User, 'findOne') as jest.Mock)
+            .mockResolvedValue({
+                id:1,
+                confirmed: true,
+                password: '12345678',
+                email: 'test@gmail.com'
+            })
+        
+
+        const response = await request(server)
+            .post('/api/auth/login')
+            .send({
+                email: 'test@gmail.com',
+                password: '1234567890'
+            })
+        
+        console.log('auth login--', response.body)
+        expect(response.statusCode).toBe(401)
+        expect(response.body).toHaveProperty('error')
+        expect(response.body.error).toBe('Password inconrrecto')
     })
 })
