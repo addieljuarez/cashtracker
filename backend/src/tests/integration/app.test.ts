@@ -329,25 +329,44 @@ describe('auth - login', () => {
 })
 
 
+// auth global
+let jwt: string
+
+async function authenticationUser() {
+    const response = await request(server)
+        .post('/api/auth/login')
+        .send({
+            email: 'test1@gmail.com',
+            password: '12345678'
+        })
+    
+    jwt = response.body.token
+    // console.log('response login token: ', jwt)
+    expect(response.statusCode).toBe(200)
+}
+
 // Budgets
 describe('GET /api/budgets', ()=> {
 
-    let jwt: string
+    // let jwt: string
 
     beforeAll(() => {
         jest.restoreAllMocks() // restaura las funciones de los jest.spy a su implementacion original
     })
     beforeAll(async() => {
-        const response = await request(server)
-            .post('/api/auth/login')
-            .send({
-                email: 'test1@gmail.com',
-                password: '12345678'
-            })
-        
-        jwt = response.body.token
-        // console.log('response login token: ', jwt)
-        expect(response.statusCode).toBe(200)
+
+        //     const response = await request(server)
+        //         .post('/api/auth/login')
+        //         .send({
+        //             email: 'test1@gmail.com',
+        //             password: '12345678'
+        //         })
+            
+        //     jwt = response.body.token
+        //     // console.log('response login token: ', jwt)
+        //     expect(response.statusCode).toBe(200)
+
+        await authenticationUser()
     })
 
 
@@ -388,3 +407,12 @@ describe('GET /api/budgets', ()=> {
         expect(response.status).not.toBe(401)
     })
 })
+
+// describe('POST /api/budgets', () => {
+//     beforeAll(async() => {
+//         await authenticationUser()
+//     })
+//     it('', () => {
+
+//     })
+// })
