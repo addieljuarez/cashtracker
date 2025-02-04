@@ -12,8 +12,8 @@ describe('TEST', () => {
     })
     it('should return a 200 status code from the homepage url', async () => {
         const response = await request(server).get('/')
-        console.log('response///', response.statusCode)
-        console.log('response///', response.text)
+        // console.log('response///', response.statusCode)
+        // console.log('response///', response.text)
 
         expect(response.statusCode).toBe(200)
         expect(response.text).toBe('API is running')
@@ -68,7 +68,7 @@ describe('Authentication - Create', () => {
                 email: 'test@gmail.com'
             })
 
-        console.log('response Auth: ', response.body.errors[0].msg)
+        // console.log('response Auth: ', response.body.errors[0].msg)
         const createAccountMock = jest.spyOn(AuthController, 'createAccount')
         
         expect(response.status).toBe(400)
@@ -325,5 +325,21 @@ describe('auth - login', () => {
         expect(generateJWT).toHaveBeenCalledTimes(1)
         expect(response.body.token).toEqual('jwt_token_mock')
         expect(checkPassword).toHaveBeenCalledWith('correctpassword', 'hashpassword')
+    })
+})
+
+
+// Budgets
+describe('GET /api/budgets', ()=> {
+    it('should reject unauthenticated access to budgets without a jwt', async() => {
+        const response = await request(server)
+            .get('/api/budgets')
+
+        // console.log('/api/budgets', response.body)
+
+        expect(response.status).toBe(401)
+        expect(response.body).toEqual({
+            error: 'No autorizado'
+        })
     })
 })
