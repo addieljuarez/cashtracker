@@ -161,3 +161,20 @@ describe('Authentication - Account confirmation code', () => {
         expect(response.body).toBe('cuenta confirmada correctamente')
     })
 })
+
+describe('auth - login', () => {
+    it('should display validation errors when the form is empty', async() => {
+        const response = await request(server)
+            .post('/api/auth/login')
+            .send({})
+
+        const mockLogin = jest.spyOn(AuthController, 'login')
+        // console.log('auth login--', response.body)
+        expect(response.statusCode).toBe(400)
+        expect(response.body).toHaveProperty('errors')
+        expect(response.body.errors).toHaveLength(3)
+        expect(mockLogin).not.toHaveBeenCalled()
+        expect(mockLogin).toHaveBeenCalledTimes(0)
+
+    })
+})
