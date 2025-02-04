@@ -3,6 +3,7 @@ import server, { connectDB } from '../../server'
 import { AuthController } from '../../controllers/AuthController'
 import User from '../../models/User'
 import * as authUtils from '../../utils/auth'
+import * as authToken from '../../utils/jwt'
 
 describe('TEST', () => {
 
@@ -295,25 +296,34 @@ describe('auth - login', () => {
 
     it('should display validation errors when all is ok and return 200', async() => {
 
-        (jest.spyOn(User, 'findOne') as jest.Mock)
+        const findOne = (jest.spyOn(User, 'findOne') as jest.Mock)
             .mockResolvedValue({
                 id:1,
                 confirmed: true,
-                password: '12345678',
+                password: 'hashpassword',
                 email: 'test5@gmail.com'
             })
         
-        jest.spyOn(authUtils, 'checkPassword').mockResolvedValue(true)
+        const checkPassword = jest.spyOn(authUtils, 'checkPassword').mockResolvedValue(true)
+        const generateJWT = jest.spyOn(authToken, 'generateJWT').mockReturnValue('jwt_token_mock')
         const response = await request(server)
             .post('/api/auth/login')
             .send({
                 email: 'test5@gmail.com',
-                password: '12345678'
+                password: 'correctpassword'
             })
         
         // console.log('auth login--', response.body)
         expect(response.statusCode).toBe(200)
         expect(response.body).toHaveProperty('user')
         expect(response.body).toHaveProperty('token')
+        expect(findOne).toHaveBeenCalled()
+        expect(findOne).toHaveBeenCalledTimes(1)
+        expect(checkPassword).toHaveBeenCalled()
+        expect(checkPassword).toHaveBeenCalledTimes(1)
+        expect(generateJWT).toHaveBeenCalled()
+        expect(generateJWT).toHaveBeenCalledTimes(1)
+        expect(response.body.token).toEqual('jwt_token_mock')
+        expect(checkPassword).toHaveBeenCalledWith('correctpassword', 'hashpassword')
     })
 })
