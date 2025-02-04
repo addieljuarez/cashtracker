@@ -408,11 +408,42 @@ describe('GET /api/budgets', ()=> {
     })
 })
 
-// describe('POST /api/budgets', () => {
-//     beforeAll(async() => {
-//         await authenticationUser()
-//     })
-//     it('', () => {
+describe('POST /api/budgets', () => {
+    beforeAll(async() => {
+        await authenticationUser()
+    })
 
-//     })
-// })
+    it('should reject unathenticated post request to budget withouth a jwt', async() => {
+        const response = await request(server)
+            .post('/api/budgets')
+
+        // console.log(response.body)
+        expect(response.statusCode).toBe(401)
+        expect(response.body).toEqual({
+            error: 'No autorizado'
+        })
+    })
+
+    it('should reject unathenticated post request to budget with a invalid jwt', async() => {
+        const response = await request(server)
+            .post('/api/budgets')
+            .auth('invalid_jwt', {
+                type: 'bearer' 
+            })
+
+        // console.log(response.body)
+        expect(response.statusCode).toBe(500)
+        expect(response.body).toEqual({
+            error: 'Token no valido en user'
+        })
+    })
+
+    // it('should display validation when the form is submitted with a invalid data', async() => {
+    //     const response = request(server)
+    //         .post('/api/budgets')
+    //         .auth(jwt, {
+    //             type: 'bearer'
+    //         })
+    //         .send({})
+    // })
+})
