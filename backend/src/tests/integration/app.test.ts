@@ -438,12 +438,17 @@ describe('POST /api/budgets', () => {
         })
     })
 
-    // it('should display validation when the form is submitted with a invalid data', async() => {
-    //     const response = request(server)
-    //         .post('/api/budgets')
-    //         .auth(jwt, {
-    //             type: 'bearer'
-    //         })
-    //         .send({})
-    // })
+    it('should display validation when the form is submitted with a invalid data', async() => {
+        const response = await request(server)
+            .post('/api/budgets')
+            .auth(jwt, {
+                type: 'bearer'
+            })
+            .send({})
+        
+        // console.log(response.body)
+        expect(response.statusCode).toBe(400)
+        expect(response.body).toHaveProperty('errors')
+        expect(response.body.errors).toHaveLength(4)
+    })
 })
