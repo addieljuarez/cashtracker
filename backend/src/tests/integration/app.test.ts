@@ -376,15 +376,15 @@ describe('GET /api/budgets', ()=> {
         })
     })
 
-    // it('should success access to budgets with a jwt', async() => {
-    //     const response = await request(server)
-    //         .get('/api/budgets')
-    //         .auth(jwt, {type: 'bearer'})
+    it('should success access to budgets with a jwt', async() => {
+        const response = await request(server)
+            .get('/api/budgets')
+            .auth(jwt, {type: 'bearer'})
 
-    //     console.log('/api/budgets', response.body)
+        // console.log('/api/budgets', response.body)
 
-    //     expect(response.status).toBe(200)
-    //     expect(response.body).toHaveLength(0)
-
-    // })
+        expect(response.status).toBe(200)
+        expect(response.body).toHaveLength(0)
+        expect(response.status).not.toBe(401)
+    })
 })
