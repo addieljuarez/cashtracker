@@ -165,9 +165,9 @@ describe('controller - AuthController - login', () => {
         await AuthController.login(req, res),
  
         expect(res.statusCode).toBe(401)
-        expect(res._getJSONData()).toHaveProperty('error', 'Password inconrrecto')
+        expect(res._getJSONData()).toHaveProperty('error', 'Password incorrecto')
         expect(res._getJSONData()).toEqual({
-            error: 'Password inconrrecto'
+            error: 'Password incorrecto'
         })
         expect(checkPassword).toHaveBeenCalled()
         expect(checkPassword).toHaveBeenCalledTimes(1)

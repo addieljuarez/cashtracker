@@ -90,7 +90,7 @@ export class AuthController {
 
         const passwordIsCheck = await checkPassword(password, user.password);
         if(!passwordIsCheck){
-            const error = new Error('Password inconrrecto')
+            const error = new Error('Password incorrecto')
             return res.status(401).json({
                 error: error.message
             })

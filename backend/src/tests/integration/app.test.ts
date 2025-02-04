@@ -2,6 +2,7 @@ import request from 'supertest'
 import server, { connectDB } from '../../server'
 import { AuthController } from '../../controllers/AuthController'
 import User from '../../models/User'
+import * as authUtils from '../../utils/auth'
 
 describe('TEST', () => {
 
@@ -164,6 +165,11 @@ describe('Authentication - Account confirmation code', () => {
 })
 
 describe('auth - login', () => {
+
+    beforeEach(() => {
+        jest.clearAllMocks()
+    })
+
     it('should display validation errors when the form is empty', async() => {
         const response = await request(server)
             .post('/api/auth/login')
@@ -261,7 +267,7 @@ describe('auth - login', () => {
 
     it('should display validation errors when password is bad', async() => {
 
-        (jest.spyOn(User, 'findOne') as jest.Mock)
+        const findOne = (jest.spyOn(User, 'findOne') as jest.Mock)
             .mockResolvedValue({
                 id:1,
                 confirmed: true,
@@ -269,7 +275,7 @@ describe('auth - login', () => {
                 email: 'test@gmail.com'
             })
         
-
+        const checkPassword = jest.spyOn(authUtils, 'checkPassword').mockResolvedValue(false)
         const response = await request(server)
             .post('/api/auth/login')
             .send({
@@ -277,9 +283,37 @@ describe('auth - login', () => {
                 password: '1234567890'
             })
         
-        console.log('auth login--', response.body)
+        // console.log('auth login--', response.body)
         expect(response.statusCode).toBe(401)
         expect(response.body).toHaveProperty('error')
-        expect(response.body.error).toBe('Password inconrrecto')
+        expect(response.body.error).toBe('Password incorrecto')
+        expect(findOne).toHaveBeenCalled()
+        expect(findOne).toHaveBeenCalledTimes(1)
+        expect(checkPassword).toHaveBeenCalled()
+        expect(checkPassword).toHaveBeenCalledTimes(1)
+    })
+
+    it('should display validation errors when all is ok and return 200', async() => {
+
+        (jest.spyOn(User, 'findOne') as jest.Mock)
+            .mockResolvedValue({
+                id:1,
+                confirmed: true,
+                password: '12345678',
+                email: 'test5@gmail.com'
+            })
+        
+        jest.spyOn(authUtils, 'checkPassword').mockResolvedValue(true)
+        const response = await request(server)
+            .post('/api/auth/login')
+            .send({
+                email: 'test5@gmail.com',
+                password: '12345678'
+            })
+        
+        // console.log('auth login--', response.body)
+        expect(response.statusCode).toBe(200)
+        expect(response.body).toHaveProperty('user')
+        expect(response.body).toHaveProperty('token')
     })
 })
