@@ -18,7 +18,6 @@ describe('TEST', () => {
     
 })
 
-
 describe('Authentication - Create', () => {
     it('should display validation errors when form is empty', async() => {
         const response = await request(server)
@@ -111,7 +110,7 @@ describe('Authentication - Create', () => {
             .send(userData)
 
         
-        console.log('response.body', response.body)
+        // console.log('response.body', response.body)
         expect(response.status).toBe(409)
         expect(response.body).toHaveProperty('error')
         expect(response.status).not.toBe(400)
@@ -120,4 +119,31 @@ describe('Authentication - Create', () => {
         // expect(AuthController.createAccount).toHaveBeenCalledTimes(1)
         expect(response.body).not.toHaveProperty('errors')
     })
+})
+
+describe('Authentication - Account confirmation code', () => {
+    it('should display error if token is empty', async() => {
+        const response = await request(server)
+            .post('/api/auth/confirm-account')
+            .send({})
+
+        // console.log('Authentication - Account confirmation code', response.body)
+        expect(response.statusCode).toBe(400)
+        expect(response.body).toHaveProperty('errors')
+        expect(response.body.errors).toHaveLength(2)
+    })
+
+    // it('should display error when token is invalid', async() => {
+    //     const response = await request(server)
+    //         .post('/api/auth/confirm-account')
+    //         .send({
+    //             token: '123456'
+    //         })
+
+    //     console.log('Authentication - Account confirmation code', response.body)
+    //     expect(response.statusCode).toBe(401)
+    //     expect(response.body).toHaveProperty('error')
+    //     expect(response.statusCode).not.toBe(200)
+    //     // expect(response.body.errors).toHaveLength(2)
+    // })
 })
