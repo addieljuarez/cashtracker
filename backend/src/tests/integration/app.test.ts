@@ -528,4 +528,19 @@ describe('GET /api/budgets/:id', () => {
         // console.log('get budget Id:', response.body)
         expect(response.status).toBe(200)
     })
+
+    it('should handle update a budget by ID', async() => {
+        const response = await request(server)
+            .put('/api/budgets/1')
+            .send({
+                name: 'update budget test',
+                amount: 1500
+            })
+            .auth(jwt, {
+                type: 'bearer'
+            })
+
+        // console.log('get budget Id:', response.body)
+        expect(response.status).toBe(200)
+    })
 })
