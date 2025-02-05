@@ -542,5 +542,9 @@ describe('GET /api/budgets/:id', () => {
 
         // console.log('get budget Id:', response.body)
         expect(response.status).toBe(200)
+        expect(response.body).toEqual({
+            status: 'budget actualizado'
+        })
     })
+
 })
