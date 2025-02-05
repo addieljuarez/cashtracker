@@ -547,4 +547,17 @@ describe('GET /api/budgets/:id', () => {
         })
     })
 
+    // it('should handle delete a budget by ID', async() => {
+    //     const response = await request(server)
+    //         .delete('/api/budgets/1')
+    //         .auth(jwt, {
+    //             type: 'bearer'
+    //         })
+
+    //     // console.log('get budget Id:', response.body)
+    //     expect(response.status).toBe(200)
+    //     expect(response.body).toEqual({
+    //         status: "Budget Eliminado"
+    //     })
+    // })
 })

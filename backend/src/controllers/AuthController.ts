@@ -33,11 +33,11 @@ export class AuthController {
             
             const response = await user.save()
             
-            await AuthEmail.sendConfirmationEmail({
-                name: user.name,
-                email: user.email,
-                token: user.token
-            })
+            // await AuthEmail.sendConfirmationEmail({
+            //     name: user.name,
+            //     email: user.email,
+            //     token: user.token
+            // })
 
             res.status(201)
             .json({

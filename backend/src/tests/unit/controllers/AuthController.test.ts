@@ -1,7 +1,7 @@
 import { createRequest, createResponse } from "node-mocks-http"
 import { AuthController } from "../../../controllers/AuthController"
 import User from "../../../models/User"
-import AuthEmail from "../../../emails/AuthEmail"
+// import AuthEmail from "../../../emails/AuthEmail"
 import { checkPassword, hashPassword } from "../../../utils/auth"
 import { generateJWT } from "../../../utils/jwt"
 
@@ -67,8 +67,8 @@ describe('controller - AuthController - login', () => {
         }));
         
 
-        // to send email
-        jest.spyOn(AuthEmail, 'sendConfirmationEmail').mockImplementation(() => Promise.resolve())
+        // // to send email
+        // jest.spyOn(AuthEmail, 'sendConfirmationEmail').mockImplementation(() => Promise.resolve())
 
         await AuthController.createAccount(req, res)
 
@@ -82,8 +82,8 @@ describe('controller - AuthController - login', () => {
         expect(User.create).toHaveBeenCalledWith(req.body)
         expect(User.findOne).toHaveBeenCalled()
         expect(User.findOne).toHaveBeenCalledTimes(1)
-        expect(AuthEmail.sendConfirmationEmail).toHaveBeenCalled()
-        expect(AuthEmail.sendConfirmationEmail).toHaveBeenCalledTimes(1)
+        // expect(AuthEmail.sendConfirmationEmail).toHaveBeenCalled()
+        // expect(AuthEmail.sendConfirmationEmail).toHaveBeenCalledTimes(1)
         expect(mockUser.save).toHaveBeenCalled()
         expect(mockUser.save).toHaveBeenCalledTimes(2)
     })
