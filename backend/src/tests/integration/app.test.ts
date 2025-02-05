@@ -472,63 +472,60 @@ describe('POST /api/budgets', () => {
     })
 })
 
-// describe('GET /api/budgets/:id', () => {
-//     beforeAll(async() => {
-//         await authenticationUser()
-//     })
+describe('GET /api/budgets/:id', () => {
+    beforeAll(async() => {
+        await authenticationUser()
+    })
 
-//     it('should reject unauthenticated get request to budget id without a jwt', async() => {
-//         const response = await request(server)
-//             .get('/api/budgets/1')
+    it('should reject unauthenticated get request to budget id without a jwt', async() => {
+        const response = await request(server)
+            .get('/api/budgets/1')
 
-//         // console.log('get budget Id:', response.body)
-//         expect(response.status).toBe(401)
-//         expect(response.body).toEqual({
-//             error: 'No autorizado'
-//         })
-//     })
+        // console.log('get budget Id:', response.body)
+        expect(response.status).toBe(401)
+        expect(response.body).toEqual({
+            error: 'No autorizado'
+        })
+    })
 
-//     it('should return 400 bad request when id is not valid', async() => {
-//         const response = await request(server)
-//             .get('/api/budgets/not_valid')
-//             .auth(jwt, {
-//                 type: 'bearer'
-//             })
+    it('should return 400 bad request when id is not valid', async() => {
+        const response = await request(server)
+            .get('/api/budgets/not_valid')
+            .auth(jwt, {
+                type: 'bearer'
+            })
 
-//         // console.log('get budget Id:', response.body)
-//         expect(response.status).toBe(400)
-//         expect(response.status).not.toBe(401)
-//         expect(response.body).toHaveProperty('errors')
-//         expect(response.body.errors).toHaveLength(2)
-//         expect(response.body.errors).toBeTruthy()
-//     })
+        // console.log('get budget Id:', response.body)
+        expect(response.status).toBe(400)
+        expect(response.status).not.toBe(401)
+        expect(response.body).toHaveProperty('errors')
+        expect(response.body.errors).toHaveLength(2)
+        expect(response.body.errors).toBeTruthy()
+    })
 
 
-//     it('should return error when id not exists', async() => {
-//         const response = await request(server)
-//             .get('/api/budgets/10')
-//             .auth(jwt, {
-//                 type: 'bearer'
-//             })
+    it('should return error when id not exists', async() => {
+        const response = await request(server)
+            .get('/api/budgets/10')
+            .auth(jwt, {
+                type: 'bearer'
+            })
 
-//         // console.log('get budget Id:', response.body)
-//         expect(response.status).toBe(404)
-//         expect(response.status).not.toBe(401)
-//         expect(response.body).toHaveProperty('error')
-//         expect(response.body.error).toBe('Budget no encontrado')
-//     })
+        // console.log('get budget Id:', response.body)
+        expect(response.status).toBe(404)
+        expect(response.status).not.toBe(401)
+        expect(response.body).toHaveProperty('error')
+        expect(response.body.error).toBe('Budget no encontrado')
+    })
 
-//     it('should return error when id not exists', async() => {
-//         const response = await request(server)
-//             .get('/api/budgets/1')
-//             .auth(jwt, {
-//                 type: 'bearer'
-//             })
+    it('should return 200 when id exists', async() => {
+        const response = await request(server)
+            .get('/api/budgets/1')
+            .auth(jwt, {
+                type: 'bearer'
+            })
 
-//         console.log('get budget Id:', response.body)
-//         expect(response.status).toBe(404)
-//         expect(response.status).not.toBe(401)
-//         expect(response.body).toHaveProperty('error')
-//         expect(response.body.error).toBe('Budget no encontrado')
-//     })
-// })
+        // console.log('get budget Id:', response.body)
+        expect(response.status).toBe(200)
+    })
+})
