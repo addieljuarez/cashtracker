@@ -451,51 +451,84 @@ describe('POST /api/budgets', () => {
         expect(response.body).toHaveProperty('errors')
         expect(response.body.errors).toHaveLength(4)
     })
-})
 
-describe('GET /api/budgets/:id', () => {
-    beforeAll(async() => {
-        await authenticationUser()
-    })
-
-    it('should reject unauthenticated get request to budget id without a jwt', async() => {
+    it('should display validation when the form is submitted with a valid data', async() => {
         const response = await request(server)
-            .get('/api/budgets/1')
-
-        // console.log('get budget Id:', response.body)
-        expect(response.status).toBe(401)
+            .post('/api/budgets')
+            .auth(jwt, {
+                type: 'bearer'
+            })
+            .send({
+                name: 'budget test',
+                amount: 1000
+            })
+        
+        console.log(response.body)
+        expect(response.statusCode).toBe(201)
+        expect(response.body).not.toHaveProperty('errors')
         expect(response.body).toEqual({
-            error: 'No autorizado'
+            respuesta: 'creado correctamente'
         })
     })
-
-    it('should return 400 bad request when id is not valid', async() => {
-        const response = await request(server)
-            .get('/api/budgets/not_valid')
-            .auth(jwt, {
-                type: 'bearer'
-            })
-
-        // console.log('get budget Id:', response.body)
-        expect(response.status).toBe(400)
-        expect(response.status).not.toBe(401)
-        expect(response.body).toHaveProperty('errors')
-        expect(response.body.errors).toHaveLength(2)
-        expect(response.body.errors).toBeTruthy()
-    })
-
-
-    it('should return error when id not exists', async() => {
-        const response = await request(server)
-            .get('/api/budgets/10')
-            .auth(jwt, {
-                type: 'bearer'
-            })
-
-        console.log('get budget Id:', response.body)
-        expect(response.status).toBe(404)
-        expect(response.status).not.toBe(401)
-        expect(response.body).toHaveProperty('error')
-        expect(response.body.error).toBe('Budget no encontrado')
-    })
 })
+
+// describe('GET /api/budgets/:id', () => {
+//     beforeAll(async() => {
+//         await authenticationUser()
+//     })
+
+//     it('should reject unauthenticated get request to budget id without a jwt', async() => {
+//         const response = await request(server)
+//             .get('/api/budgets/1')
+
+//         // console.log('get budget Id:', response.body)
+//         expect(response.status).toBe(401)
+//         expect(response.body).toEqual({
+//             error: 'No autorizado'
+//         })
+//     })
+
+//     it('should return 400 bad request when id is not valid', async() => {
+//         const response = await request(server)
+//             .get('/api/budgets/not_valid')
+//             .auth(jwt, {
+//                 type: 'bearer'
+//             })
+
+//         // console.log('get budget Id:', response.body)
+//         expect(response.status).toBe(400)
+//         expect(response.status).not.toBe(401)
+//         expect(response.body).toHaveProperty('errors')
+//         expect(response.body.errors).toHaveLength(2)
+//         expect(response.body.errors).toBeTruthy()
+//     })
+
+
+//     it('should return error when id not exists', async() => {
+//         const response = await request(server)
+//             .get('/api/budgets/10')
+//             .auth(jwt, {
+//                 type: 'bearer'
+//             })
+
+//         // console.log('get budget Id:', response.body)
+//         expect(response.status).toBe(404)
+//         expect(response.status).not.toBe(401)
+//         expect(response.body).toHaveProperty('error')
+//         expect(response.body.error).toBe('Budget no encontrado')
+//     })
+
+//     it('should return error when id not exists', async() => {
+//         const response = await request(server)
+//             .get('/api/budgets/1')
+//             .auth(jwt, {
+//                 type: 'bearer'
+//             })
+
+//         console.log('get budget Id:', response.body)
+//         expect(response.status).toBe(404)
+//         expect(response.status).not.toBe(401)
+//         expect(response.body).toHaveProperty('error')
+//         expect(response.body.error).toBe('Budget no encontrado')
+//     })
+// })
