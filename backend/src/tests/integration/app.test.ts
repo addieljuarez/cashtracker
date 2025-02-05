@@ -483,4 +483,19 @@ describe('GET /api/budgets/:id', () => {
         expect(response.body.errors).toHaveLength(2)
         expect(response.body.errors).toBeTruthy()
     })
+
+
+    it('should return error when id not exists', async() => {
+        const response = await request(server)
+            .get('/api/budgets/10')
+            .auth(jwt, {
+                type: 'bearer'
+            })
+
+        console.log('get budget Id:', response.body)
+        expect(response.status).toBe(404)
+        expect(response.status).not.toBe(401)
+        expect(response.body).toHaveProperty('error')
+        expect(response.body.error).toBe('Budget no encontrado')
+    })
 })
