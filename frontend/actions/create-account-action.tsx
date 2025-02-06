@@ -3,8 +3,9 @@
 export async function register(formData: FormData){
     console.log('desde server action,formData', formData)
     const registerData = {
-        name: formData.get('name'),
         email: formData.get('email'),
-        passowrd: formData.get('password')
+        name: formData.get('name'),
+        password: formData.get('password'),
+        password_confirmation: formData.get('password_confirmation')
     }
 }
