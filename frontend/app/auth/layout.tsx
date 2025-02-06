@@ -7,7 +7,16 @@ export default function RootLayout({
   return (
     <>
         <div className="lg:grid lg:grid-cols-2 lg:min-h-screen">
-            <div className="bg-purple-950 flex justify-center">
+
+            <div className="
+                flex justify-center 
+                bg-purple-950 
+                lg:bg-auth 
+                lg:bg-30 
+                bg-no-repeat 
+                bg-left-bottom
+                "
+            >
                 <div className="w-96 py-10  lg:py-20">
                     <Logo />
                 </div>
