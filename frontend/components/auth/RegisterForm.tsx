@@ -6,14 +6,23 @@ import ErrorMessage from "../ui/ErrorMessage"
 import SuccessMessage from "../ui/SuccessMessage"
 
 export default function RegisterForm(){
+
+    // const ref = createRef<HTMLFormElement>()
     const [state, formAction] = useActionState(register, {
         errors: [],
         success: ''
     })
 
+    // useEffect(() => {
+    //     if(state.success){
+    //         ref.current?.reset()
+    //     }
+    // }, [state])
+
     console.log(state.errors)
     return(
         <form 
+            // ref={ref}
             className="mt-14 space-y-5"
             noValidate
             action={formAction}
