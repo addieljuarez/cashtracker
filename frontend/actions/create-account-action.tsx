@@ -1,13 +1,14 @@
 "use server"
 
-import { RegisterSchema } from "@/src/schemas"
+import { RegisterSchema, SuccessSchema } from "@/src/schemas"
 
 // interface typeReturn {
 //     status: string;
 // }
 
 type ActionStateTypr = {
-    errors: string[]
+    errors: string[],
+    success: string
 } 
 
 
@@ -31,7 +32,8 @@ export async function register(prevState: ActionStateTypr, formData: FormData): 
         const errors = register.error.errors.map(error => error.message)
         console.log(errors)
         return {
-            errors
+            errors,
+            success: prevState.success // es es el va;or inicial
         }
     }
 
@@ -55,7 +57,10 @@ export async function register(prevState: ActionStateTypr, formData: FormData): 
     console.log('request', req)
     const json = await req.json()
     console.log(json)
+    const success = SuccessSchema.parse(json.status)
+    console.log(success)
     return {
-        errors: []
+        errors: prevState.errors,
+        success
     }
 } 

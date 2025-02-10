@@ -13,3 +13,7 @@ export const RegisterSchema = z.object({
     message: 'Las contraseñas no son iguales',
     path: ['password_confirmation'] // es donde se mostrara el error 
 })
+
+export const SuccessSchema = z.string().min(1, {
+    message: 'Valor ni valido'
+})
