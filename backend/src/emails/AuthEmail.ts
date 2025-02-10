@@ -64,6 +64,7 @@ class AuthEmail {
                     
                     <h1>Hi, ${user.name}</h1>
                     <p>codigo ${user.token}</p>
+                    <a href="${process.env.FRONTEND_URL}/auth/confirm-account"}>Confirma tu cuenta</a>
                     <callout class="primary">
                         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reprehenderit repellendus natus, sint ea optio dignissimos asperiores inventore a molestiae dolorum placeat repellat excepturi mollitia ducimus unde doloremque ad, alias eos!</p>
                     </callout>
@@ -152,6 +153,7 @@ class AuthEmail {
                     
                     <h1>Hi, ${user.name}</h1>
                     <p>codigo ${user.token}</p>
+                    <a href="${process.env.FRONTEND_URL}/auth/new-password"}>Nueva Contraseña</a>
                     <callout class="primary">
                         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reprehenderit repellendus natus, sint ea optio dignissimos asperiores inventore a molestiae dolorum placeat repellat excepturi mollitia ducimus unde doloremque ad, alias eos!</p>
                     </callout>
