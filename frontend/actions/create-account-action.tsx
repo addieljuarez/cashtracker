@@ -2,8 +2,19 @@
 
 import { RegisterSchema } from "@/src/schemas"
 
-export async function register(formData: FormData): Promise<any> {
-    // console.log('desde server action,formData', formData)
+// interface typeReturn {
+//     status: string;
+// }
+
+type ActionStateTypr = {
+    errors: string[]
+} 
+
+
+
+export async function register(prevState: ActionStateTypr, formData: FormData): Promise<ActionStateTypr> {
+    // console.log(formData)
+    // // console.log('desde server action,formData', formData)
     const registerData = {
         email: formData.get('email'),
         name: formData.get('name'),
@@ -13,11 +24,18 @@ export async function register(formData: FormData): Promise<any> {
 
     const register = RegisterSchema.safeParse(registerData)
     // console.log(register.error?.errors)
-    const errors = register.error?.errors.map(error => error.message)
-    console.log(errors)
+    
+    
+
     if(!register.success){
-        return {}
+        const errors = register.error.errors.map(error => error.message)
+        console.log(errors)
+        return {
+            errors
+        }
     }
+
+    
 
     const url = `${process.env.API_URL}/api/auth/create-account`
     console.log('url', url)
@@ -37,5 +55,7 @@ export async function register(formData: FormData): Promise<any> {
     console.log('request', req)
     const json = await req.json()
     console.log(json)
-    return {};
+    return {
+        errors: []
+    }
 } 
