@@ -15,9 +15,19 @@ export const RegisterSchema = z.object({
 })
 
 export const SuccessSchema = z.string().min(1, {
-    message: 'Valor ni valido'
+    message: 'Valor no valido'
 })
 
 export const ErrorReponseSchema = z.object({
     error: z.string()
+})
+
+export const TokenShema = z.string({
+    message: 'Token no valido'
+})
+.min(6, {
+    message: 'Token no valido'
+})
+.max(6, {
+    message: 'Token no valido'
 })
